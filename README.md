@@ -1,2 +1,2 @@
-# NZMIS
-Nai Zindagi MIS
+# skoogle
+An online skills exchange program
