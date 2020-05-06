@@ -123,7 +123,12 @@ class ApiController extends Controller
 
     public function getPositiveClientsList($id, $pageNo, $records){
 
+        $cityExists = City::where('ShortName', $id)->exists();
         $city = City::where('ShortName', $id)->first();
+        if(!$cityExists){
+            $results[] = ['success' => 0, "response" => "none"];
+            return response()->json($results);
+        }
         $cityId = $city->ID;
         $pageNumber = $pageNo;
         $perPage= $records;
@@ -134,12 +139,14 @@ class ApiController extends Controller
         $query = "SELECT VC.ClientID, VC.Status, Clients.RegNo FROM VCCTsServiceDetails as VC 
                  JOIN Clients ON Clients.Id = VC.ClientID 
                 JOIN Cities as CT on CT.Id = Clients.CityID 
-                WHERE CT.Id = '5' AND
+                WHERE CT.Id = '" .$cityId. "' AND
                 VC.Status = 'Positive'
                 ORDER BY VC.ClientID ASC 
 				OFFSET ".$newPageNumber." ROWS 
                 FETCH NEXT ".$perPage ." ROWS ONLY
                 ";
+
+        
         // return $query;
         $results = DB::select($query);
         return response()->json($results);
