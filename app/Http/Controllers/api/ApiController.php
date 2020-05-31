@@ -121,10 +121,17 @@ class ApiController extends Controller
     }
 
 
-    public function getPositiveClientsList($id, $pageNo, $records){
+    // public function getPositiveClientsList($id, $pageNo, $records){
+    public function getPositiveClientsList(Request $request){
+
+        $id = $request->DistrictId;
+        $pageNo = $request->PageNumber;
+        $records = $request->PageSize;
+        
 
         $cityExists = City::where('ShortName', $id)->exists();
         $city = City::where('ShortName', $id)->first();
+       
         if(!$cityExists){
             $results[] = ['success' => 0, "response" => "none"];
             return response()->json($results);

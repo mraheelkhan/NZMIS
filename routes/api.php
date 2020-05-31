@@ -18,6 +18,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('getHtcDueSatus/{regno}', 'Api\ApiController@getHtcDueSatus');
-Route::get('getPositiveClientsList/{id}/{page}/{records}', 'Api\ApiController@getPositiveClientsList');
+Route::get('getPositiveClientsList', 'Api\ApiController@getPositiveClientsList');
 Route::get('getAdherenceStatus/{id}', 'Api\ApiController@getAdherenceStatus');
 Route::get('getArvRefillDate/{id}', 'Api\ApiController@getArvRefillDate');
