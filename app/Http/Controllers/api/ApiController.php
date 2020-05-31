@@ -128,7 +128,6 @@ class ApiController extends Controller
         $pageNo = $request->PageNumber;
         $records = $request->PageSize;
         
-
         $cityExists = City::where('ShortName', $id)->exists();
         $city = City::where('ShortName', $id)->first();
        
@@ -143,17 +142,17 @@ class ApiController extends Controller
         
         // dd($city);
         // $clients = Client::where('CityId', $cityId)->pluck('ID');
+        
+        $clients = Client::where('DistrictId', $id)->get();
         $query = "SELECT VC.ClientID, VC.Status, Clients.RegNo FROM VCCTsServiceDetails as VC 
-                 JOIN Clients ON Clients.Id = VC.ClientID 
+                JOIN Clients ON Clients.Id = VC.ClientID 
                 JOIN Cities as CT on CT.Id = Clients.CityID 
                 WHERE CT.Id = '" .$cityId. "' AND
                 VC.Status = 'Positive'
                 ORDER BY VC.ClientID ASC 
-				OFFSET ".$newPageNumber." ROWS 
+                OFFSET ".$newPageNumber." ROWS 
                 FETCH NEXT ".$perPage ." ROWS ONLY
                 ";
-
-        
         // return $query;
         $results = DB::select($query);
         return response()->json($results);
@@ -227,6 +226,31 @@ class ApiController extends Controller
             );
         }
         return response()->json($data);
+    }
+
+    public function getPositiveClientsCount($code){
+
+        /* $result = VCCTsServiceDetail::where('Status', 'Positive')
+                ->where('Cities.ShortName', $code)
+                ->join("Clients", "Clients.Id", "VCCTsServiceDetails.ClientID")
+                ->join("Cities", "Cities.Id", "Clients.CityID")
+                ->count();
+
+        return response()->json(
+            [
+            'result' => $result
+        ]
+        ); */
+        $query = "SELECT count(*) as positiveClientsCount FROM VCCTsServiceDetails as VC 
+        JOIN Clients ON Clients.Id = VC.ClientID 
+        JOIN Cities as CT on CT.Id = Clients.CityID 
+        WHERE CT.ShortName = '".$code."' AND
+        VC.Status = 'Positive'";
+
+        $results = DB::select($query);
+
+        //foreach($results as $result){}
+        return response()->json($result);
     }
 
 }
