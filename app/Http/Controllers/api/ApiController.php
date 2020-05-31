@@ -249,7 +249,7 @@ class ApiController extends Controller
 
         $results = DB::select($query);
 
-        //foreach($results as $result){}
+        foreach($results as $result){}
         return response()->json($result);
     }
 
