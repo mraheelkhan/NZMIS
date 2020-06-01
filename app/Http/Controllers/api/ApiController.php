@@ -130,7 +130,7 @@ class ApiController extends Controller
         
         $cityExists = City::where('ShortName', $id)->exists();
         $city = City::where('ShortName', $id)->first();
-       
+        
         if(!$cityExists){
             $results[] = ['success' => 0, "response" => "none"];
             return response()->json($results);
@@ -143,7 +143,7 @@ class ApiController extends Controller
         // dd($city);
         // $clients = Client::where('CityId', $cityId)->pluck('ID');
         
-        $clients = Client::where('DistrictId', $id)->get();
+        /* $clients = Client::where('DistrictId', $id)->get(); */
         $query = "SELECT VC.ClientID, VC.Status, Clients.RegNo FROM VCCTsServiceDetails as VC 
                 JOIN Clients ON Clients.Id = VC.ClientID 
                 JOIN Cities as CT on CT.Id = Clients.CityID 
@@ -241,7 +241,7 @@ class ApiController extends Controller
             'result' => $result
         ]
         ); */
-        $query = "SELECT count(*) as positiveClientsCount FROM VCCTsServiceDetails as VC 
+        $query = "SELECT count(distinct(Clients.RegNo)) as positiveClientsCount FROM VCCTsServiceDetails as VC 
         JOIN Clients ON Clients.Id = VC.ClientID 
         JOIN Cities as CT on CT.Id = Clients.CityID 
         WHERE CT.ShortName = '".$code."' AND
