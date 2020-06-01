@@ -22,3 +22,8 @@ Route::get('getPositiveClientsCount/{code}', 'Api\ApiController@getPositiveClien
 Route::get('getPositiveClientsList', 'Api\ApiController@getPositiveClientsList');
 Route::get('getAdherenceStatus/{id}', 'Api\ApiController@getAdherenceStatus');
 Route::get('getArvRefillDate/{id}', 'Api\ApiController@getArvRefillDate');
+
+
+Route::get('clientCount', 'DashboardController@clientCount');
+Route::get('clientTested', 'DashboardController@clientTested');
+Route::get('byCitiesPWID', 'DashboardController@byCitiesPWID');

@@ -35,3 +35,6 @@ Route::get('/db', function(){
 Route::get('/test', function(){
     echo "Pakistan";
 });
+
+
+Route::get('dashboard', 'DashboardController@index');
