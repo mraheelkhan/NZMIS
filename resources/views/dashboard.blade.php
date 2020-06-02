@@ -149,7 +149,7 @@
                     data:[]
                 } 
                 $.ajax({
-                    url: "http://localhost/NZMIS/api/byCitiesPWID",
+                    url: "http://mail.nzmis.com/api/byCitiesPWID",
                     type: 'GET',
                     success: function(res) {
                         
@@ -188,10 +188,7 @@
                         type: 'column'
                     },
                     title: {
-                        text: 'Monthly Average Rainfall'
-                    },
-                    subtitle: {
-                        text: 'Source: WorldClimate.com'
+                        text: 'Cascade of services accessed by PWID (2012 - to date)'
                     },
                     xAxis: {
                         categories: [
@@ -210,13 +207,13 @@
                     yAxis: {
                         min: 0,
                         title: {
-                            text: 'Rainfall (mm)'
+                            text: 'text'
                         }
                     },
                     tooltip: {
                         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                         pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                            '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                            '<td style="padding:0"><b>{point.y}</b></td></tr>',
                         footerFormat: '</table>',
                         shared: true,
                         useHTML: true

@@ -149,9 +149,9 @@ class ApiController extends Controller
                 JOIN Cities as CT on CT.Id = Clients.CityID 
                 WHERE CT.Id = '" .$cityId. "' AND
                 VC.Status = 'Positive'
-                ORDER BY VC.ClientID ASC 
-                OFFSET ".$newPageNumber." ROWS 
-                FETCH NEXT ".$perPage ." ROWS ONLY
+                ORDER BY VC.RegNo ASC 
+                --OFFSET ".$newPageNumber." ROWS 
+                --FETCH NEXT ".$perPage ." ROWS ONLY
                 ";
         // return $query;
         $results = DB::select($query);
@@ -240,17 +240,22 @@ class ApiController extends Controller
             [
             'result' => $result
         ]
-        ); */
+        ); 
         $query = "SELECT count(distinct(Clients.RegNo)) as positiveClientsCount FROM VCCTsServiceDetails as VC 
         JOIN Clients ON Clients.Id = VC.ClientID 
         JOIN Cities as CT on CT.Id = Clients.CityID 
         WHERE CT.ShortName = '".$code."' AND
-        VC.Status = 'Positive'";
+        VC.Status = 'Positive'";*/
 
+		$query = "SELECT Clients.RegNo FROM VCCTsServiceDetails as VC 
+        JOIN Clients ON Clients.Id = VC.ClientID 
+        JOIN Cities as CT on CT.Id = Clients.CityID 
+        WHERE CT.ShortName = '".$code."' AND
+        VC.Status = 'Positive'";
         $results = DB::select($query);
 
-        foreach($results as $result){}
-        return response()->json($result);
+        //foreach($results as $result){}
+        return response()->json($results);
     }
 
 }
