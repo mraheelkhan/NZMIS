@@ -61,6 +61,8 @@
 
 
         <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/highcharts-more.js"></script>
+        <script src="https://code.highcharts.com/highcharts-3d.js"></script>
         <script src="https://code.highcharts.com/modules/exporting.js"></script>
         <script src="https://code.highcharts.com/modules/export-data.js"></script>
         <script src="https://code.highcharts.com/modules/accessibility.js"></script>
@@ -81,6 +83,26 @@
                     <div class="col-md-11">
                         <h2>Spouse</h2>
                         <div id="containerSpouse"></div>
+                    </div>
+                    <div class="col-md-11">
+                        <h2>Annual Client</h2>
+                        <div id="containerAnnualClient"></div>
+                    </div>
+                    <div class="col-md-11">
+                        <h2>Annual Spouse</h2>
+                        <div id="containerAnnualSpouse"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <h2>Hiv Prev Client</h2>
+                        <div id="containerClientPrev"></div>
+                    </div>
+                    <div class="col-md-11">
+                        <h2>Hiv Prev Spouse</h2>
+                        <div id="containerSpousePrev"></div>
+                    </div>
+                    <div class="col-md-11">
+                        <h2>Individual Clients Contacted Past 30 Days</h2>
+                        <div id="containerIndividualClient30"></div>
                     </div>
                     <div class="col-md-6 col-sm-6 col-xs-6">
                         <div class="dashboard_graph">
@@ -129,11 +151,25 @@
 
         <script>
             window.onload = function(e){ 
+
+                Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function (color) {
+                    return {
+                        radialGradient: {
+                            cx: 0.5,
+                            cy: 0.3,
+                            r: 0.7
+                        },
+                        stops: [
+                            [0, color],
+                            [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
+                        ]
+                    };
+                });
+
                 $.ajax({
                     url: "http://localhost/NZMIS/api/clientCount",
                     type: 'GET',
                     success: function(res) {
-                        console.log(res.TotalClients)
                         $('#ctl00_cphRightContent_lblClients').html(res.TotalClients)
                     }
                 });
@@ -142,12 +178,11 @@
                     url: "http://localhost/NZMIS/api/clientTested",
                     type: 'GET',
                     success: function(res) {
-                        console.log(res.TotalTestingClients)
                         $('#ctl00_cphRightContent_lblTestingClients ').html(res.TotalTestingClients)
                     }
                 });
 
-                /* var dataSeries =[];
+                var dataSeries =[];
                 var column = {
                     data:[]
                 } 
@@ -157,7 +192,6 @@
                     success: function(res) {
                         
                         res.forEach(data => {
-                            // console.log("response " + JSON.stringify(data))
                             column.name = data.CityShortName;
                             if(column.name == "All"){
                                 column.visible = true;
@@ -177,7 +211,6 @@
                             
                             // console.log("response " + JSON.stringify(column))
                             dataSeries.push(column)
-                            console.log(dataSeries)
                             column = {
                                 data:[]
                             }
@@ -211,7 +244,7 @@
                                 },
                                 min: 0,
                                 title: {
-                                    text: 'text'
+                                    text: 'Number of PWID'
                                 }
                             },
                             tooltip: {
@@ -239,10 +272,9 @@
                             series: dataSeries
                         });
                     }
-                }); */
+                }); 
 
-
-
+                // Spouse Chart for Admin
                 var dataSeriesSpouse =[];
                 var columnSpouse = {
                     data:[]
@@ -257,7 +289,7 @@
                             columnSpouse.name = data.CityShortName;
                             if(columnSpouse.name == "All"){
                                 columnSpouse.visible = true;
-                                columnSpouse.color = "#287161";
+                                columnSpouse.color = "#0f2a24";
                             } else {
                                 columnSpouse.visible = false;
                             }
@@ -267,10 +299,8 @@
                             columnSpouse.data.push(parseInt(data.SpousesReactive))
                             columnSpouse.data.push(parseInt(data.SpousesRegART))
                             columnSpouse.data.push(parseInt(data.SpousesIniART))
-                            
-                            console.log("response " + JSON.stringify(columnSpouse))
+
                             dataSeriesSpouse.push(columnSpouse)
-                            console.log(dataSeriesSpouse)
                             columnSpouse = {
                                 data:[]
                             }
@@ -301,7 +331,7 @@
                                 },
                                 min: 0,
                                 title: {
-                                    text: 'text'
+                                    text: 'Number of PWIDs spouses'
                                 }
                             },
                             tooltip: {
@@ -330,10 +360,302 @@
                         });
                     }
                 });
+
+
+                // Client Annual chart for Admin
+                var dataSeriesAnnualClient =[];
+                var columnAnnualClient = {} 
+                $.ajax({
+                    url: "http://localhost/NZMIS/api/annualClients",
+                    type: 'GET',
+                    success: function(res) {
+                        
+                        res.forEach(data => {
+                            columnAnnualClient.name = data.YearClient;
+                            columnAnnualClient.y =  parseInt(data.TotalClients);
+
+                            dataSeriesAnnualClient.push(columnAnnualClient)
+                            columnAnnualClient = {
+                            }
+                        });
+                        
+                        Highcharts.chart('containerAnnualClient', {
+                            chart: {
+                                type: 'waterfall'
+                            },
+
+                            title: {
+                                text: 'Highcharts Waterfall'
+                            },
+
+                            xAxis: {
+                                type: 'category'
+                            },
+
+                            yAxis: {
+                                title: {
+                                    text: 'USD'
+                                }
+                            },
+
+                            legend: {
+                                enabled: false
+                            },
+
+                            tooltip: {
+                                pointFormat: '<b>${point.y:,.2f}</b> USD'
+                            },
+
+                            series: [{
+                                // upColor: Highcharts.getOptions().colors[2],
+                                // color: Highcharts.getOptions().colors[3],
+                                data: dataSeriesAnnualClient,
+                                dataLabels: {
+                                    enabled: true,
+                                    // formatter: function () {
+                                    //     return Highcharts.numberFormat(this.y / 1000, 0, ',') + 'k';
+                                    // },
+                                    style: {
+                                        fontWeight: 'bold'
+                                    }
+                                },
+                                pointPadding: 0
+                            }]
+                        });
+                    }
+                });
+
+                // Client Spouse chart for Admin
+                var dataSeriesAnnualSpouse =[];
+                var columnAnnualSpouse = {} 
+                $.ajax({
+                    url: "http://localhost/NZMIS/api/annualSpouse",
+                    type: 'GET',
+                    success: function(res) {
+                        
+                        res.forEach(data => {
+                            columnAnnualSpouse.name = data.YearSpouse;
+                            columnAnnualSpouse.y =  parseInt(data.TotalSpouses);
+
+                            dataSeriesAnnualSpouse.push(columnAnnualSpouse)
+                            columnAnnualSpouse = {
+                            }
+                        });
+                        
+                        Highcharts.chart('containerAnnualSpouse', {
+                            chart: {
+                                type: 'waterfall'
+                            },
+
+                            title: {
+                                text: 'Highcharts Waterfall'
+                            },
+
+                            xAxis: {
+                                type: 'category'
+                            },
+
+                            yAxis: {
+                                title: {
+                                    text: 'USD'
+                                }
+                            },
+
+                            legend: {
+                                enabled: false
+                            },
+
+                            tooltip: {
+                                pointFormat: '<b>${point.y:,.2f}</b> USD'
+                            },
+
+                            series: [{
+                                upColor: Highcharts.getOptions().colors[2],
+                                color: Highcharts.getOptions().colors[3],
+                                data: dataSeriesAnnualSpouse,
+                                dataLabels: {
+                                    enabled: true,
+                                    // formatter: function () {
+                                    //     return Highcharts.numberFormat(this.y / 1000, 0, ',') + 'k';
+                                    // },
+                                    style: {
+                                        fontWeight: 'bold'
+                                    }
+                                },
+                                pointPadding: 0
+                            }]
+                        });
+                    }
+                });
+                
+                // HIV Spouse prevalance 3D Pie Chart
+                var dataSeriesSpousePrev =[];
+                var columnSpousePrev = {} 
+                $.ajax({
+                    url: "http://localhost/NZMIS/api/htcClientSpouseAllCities",
+                    type: 'GET',
+                    success: function(res) {
+                        
+                        nonreactiveClients = parseInt(res.HTCClients);
+                        reactiveClients = parseInt(res.HTCClietsPositive);
+
+                        nonreactiveSpouse = parseInt(res.HTCSpouse);
+                        reactiveSpouse = parseInt(res.HTCSpousePositive);
+                        
+                        Highcharts.chart('containerClientPrev', {
+                            chart: {
+                                type: 'pie',
+                                options3d: {
+                                    enabled: true,
+                                    alpha: 45,
+                                    beta: 0
+                                }
+                            },
+                            title: {
+                                text: 'HIV Prevalance based on HTC'
+                            },
+                            colors: ['#E9806E', '#45E289'],
+                            accessibility: {
+                                point: {
+                                    valueSuffix: '%'
+                                }
+                            },
+                            tooltip: {
+                                pointFormat: '<b>{point.percentage:.1f}%</b> ( {point.name})'
+                            },
+                            plotOptions: {
+                                pie: {
+                                    allowPointSelect: true,
+                                    cursor: 'pointer',
+                                    depth: 35,
+                                    dataLabels: {
+                                        distance: -40,
+                                        enabled: true,
+                                        format: '{point.percentage:.1f}%'
+                                    },
+                                    showInLegend: true
+                                }
+                            },
+                            series: [{
+                                type: 'pie',
+                                // name: 'Browser share',
+                                data: [
+                                    ['Reactive Clients', reactiveClients],
+                                    ['Non Reactive Clients', nonreactiveClients],
+                                ]
+                            }],
+                            legends : true
+                        });
+
+                        Highcharts.chart('containerSpousePrev', {
+                            chart: {
+                                type: 'pie',
+                                options3d: {
+                                    enabled: true,
+                                    alpha: 45,
+                                    beta: 0
+                                }
+                            },
+                            title: {
+                                text: 'HIV Prevalance based on HTC'
+                            },
+                            colors: ['#E9806E', '#45E289'],
+                            accessibility: {
+                                point: {
+                                    valueSuffix: '%'
+                                }
+                            },
+                            tooltip: {
+                                pointFormat: '<b>{point.percentage:.1f}%</b> ( {point.name})'
+                            },
+                            plotOptions: {
+                                pie: {
+                                    allowPointSelect: true,
+                                    cursor: 'pointer',
+                                    depth: 35,
+                                    dataLabels: {
+                                        distance: -40,
+                                        enabled: true,
+                                        format: '{point.percentage:.1f}%'
+                                    },
+                                    showInLegend: true
+                                }
+                            },
+                            series: [{
+                                type: 'pie',
+                                // name: 'Browser share',
+                                data: [
+                                    ['Reactive Spouse', reactiveSpouse],
+                                    ['Non Reactive Spouse', nonreactiveSpouse],
+                                ]
+                            }],
+                            legends : true
+                        });
+                    }
+                });
+
+                
+                // HIV Spouse prevalance 3D Pie Chart
+                var dataSeriesSpousePrev =[];
+                var columnSpousePrev = {} 
+                $.ajax({
+                    url: "http://localhost/NZMIS/api/individualServiceContact",
+                    type: 'GET',
+                    success: function(res) {
+                        
+                        nonreactiveClients = parseInt(res.HTCClients);
+                        reactiveClients = parseInt(res.HTCClietsPositive);
+
+                        nonreactiveSpouse = parseInt(res.HTCSpouse);
+                        reactiveSpouse = parseInt(res.HTCSpousePositive);
+                        
+                        chart = new Highcharts.Chart({
+                            chart: {
+                                renderTo: 'containerIndividualClient30',
+                                type: 'pie'
+                            },
+                            title: {
+                                text: 'Number of Individuals Client Contacted (past 30 days)'
+                            },
+                            yAxis: {
+                                title: {
+                                    text: 'Total percent market share'
+                                }
+                            },
+                            plotOptions: {
+                                pie: {
+                                    shadow: false,
+                                    dataLabels: {
+                                    distance: -40,
+                                    enabled: true,
+                                    format: '{point.percentage:.1f}%'
+                                    },
+                                }
+                            },
+                            tooltip: {
+                                formatter: function() {
+                                    return this.point.name + '<br> <ul><li>Services: '+ this.y +'</li></ul>';
+                                }
+                            },
+                            series: [{
+                                name: 'Browsers',
+                                data: [["Firefox",60],["MSIE",40],["Chrome",7],["Chrome",7],["Chrome",7],["Chrome",7]],
+                                size: '100%',
+                                innerSize: '50%',
+                                showInLegend:true,
+                                dataLabels: {
+                                    enabled: true
+                                }
+                            }]
+                        });
+                    }
+                });
+
+                
                 
             }
            
-
+           
             
 
             

@@ -28,3 +28,7 @@ Route::get('clientCount', 'DashboardController@clientCount');
 Route::get('clientTested', 'DashboardController@clientTested');
 Route::get('byCitiesPWID', 'DashboardController@byCitiesPWID');
 Route::get('byCitiesSpouse', 'DashboardController@byCitiesSpouse');
+Route::get('annualClients', 'DashboardController@annualClients');
+Route::get('annualSpouse', 'DashboardController@annualSpouse');
+Route::get('htcClientSpouseAllCities', 'DashboardController@HtcClientSpousePrevalence');
+Route::get('individualServiceContact', 'DashboardController@IndividualServiceContact');

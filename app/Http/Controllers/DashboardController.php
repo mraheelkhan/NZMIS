@@ -59,21 +59,43 @@ class DashboardController extends Controller
         // $result = DB::select($query);
         return $sp;
     }
+    
 
     public function byCitiesSpouse(){
         $sp = DB::select('SET NOCOUNT ON;EXEC [dbo].[RptDashboardCascadingSpouses]');
         return $sp;
     }
-    public function clientTested2(){
-        $query = "";
+    public function annualClients(){
+        $query = "SELECT Clients.* FROM (SELECT DATENAME(YEAR,(Clients.DateofReg)) AS YearClient, Count (ID) AS TotalClients From Clients WHERE Clients.CountryID = 168 GROUP BY  DATENAME(YEAR,(Clients.DateofReg)) )Clients order by YearClient
+        ";
 
-        $result = DB::select($query);
-        return $result;
+        $results = DB::select($query);
+        return $results;
     }
-    public function clientTested3(){
-        $query = "";
+    public function annualSpouse(){
+        $query = "SELECT   Spouses.* FROM (SELECT  DATENAME(YEAR,(Spouses.DateofReg)) AS YearSpouse, COUNT(DISTINCT [Spouses].ID) AS TotalSpouses From Spouses INNER JOIN [NZMIS].[dbo].[Clients] ON [Clients].[ID] = [Spouses].[ClientID]	INNER JOIN Cities ON Cities.ID = Clients.CityID	INNER JOIN	States ON States.ID = Cities.StateID	INNER JOIN	[NZMIS].[dbo].[VCCTsServiceDetails] ON [VCCTsServiceDetails].[ClientID] =[Clients].[ID]  WHERE	[Clients].[MaritalStatus]= 'Married' AND [VCCTsServiceDetails].[Status] = 'positive' AND Clients.CountryID=168	
+        GROUP BY  DATENAME(YEAR,(Spouses.DateofReg)))Spouses ORDER By YearSpouse
+        ";
 
-        $result = DB::select($query);
-        return $result;
+        $results = DB::select($query);
+        return $results;
+    }
+    public function HtcClientSpousePrevalence(){
+        // $query = "";
+        $sp = DB::select('SET NOCOUNT ON;EXEC [dbo].[RptDashboardHTCClientSpouse]');
+        // $result = DB::select($query);
+        $responseArray = array();
+        foreach($sp as $record){
+            if($record->City == 'AllCities'){
+                $responseArray = $record;
+            }
+        }
+        return response()->json($responseArray);
+    }
+    public function IndividualServiceContact(){
+        // $query = "";
+        $sp = DB::select('SET NOCOUNT ON;EXEC [dbo].[RptDashboardServicesContacts]');
+        // $result = DB::select($query);
+        return $sp;
     }
 }
