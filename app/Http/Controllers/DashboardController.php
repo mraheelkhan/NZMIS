@@ -59,6 +59,11 @@ class DashboardController extends Controller
         // $result = DB::select($query);
         return $sp;
     }
+
+    public function byCitiesSpouse(){
+        $sp = DB::select('SET NOCOUNT ON;EXEC [dbo].[RptDashboardCascadingSpouses]');
+        return $sp;
+    }
     public function clientTested2(){
         $query = "";
 

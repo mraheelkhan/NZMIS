@@ -27,3 +27,4 @@ Route::get('getArvRefillDate/{id}', 'Api\ApiController@getArvRefillDate');
 Route::get('clientCount', 'DashboardController@clientCount');
 Route::get('clientTested', 'DashboardController@clientTested');
 Route::get('byCitiesPWID', 'DashboardController@byCitiesPWID');
+Route::get('byCitiesSpouse', 'DashboardController@byCitiesSpouse');
