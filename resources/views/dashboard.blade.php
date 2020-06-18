@@ -104,6 +104,10 @@
                         <h2>Individual Clients Contacted Past 30 Days</h2>
                         <div id="containerIndividualClient30"></div>
                     </div>
+                    <div class="col-md-11">
+                        <h2>Number of PWID Contacted NSEP</h2>
+                        <div id="containerPWIDNsepContacted"></div>
+                    </div>
                     <div class="col-md-6 col-sm-6 col-xs-6">
                         <div class="dashboard_graph">
                             <div class="row x_title">
@@ -595,7 +599,7 @@
                 });
 
                 
-                // HIV Spouse prevalance 3D Pie Chart
+                // Individual Service Client Contact Past 30 Day - Donut Chart
                 var dataSeriesSpousePrev =[];
                 var columnSpousePrev = {} 
                 $.ajax({
@@ -619,7 +623,7 @@
                             },
                             yAxis: {
                                 title: {
-                                    text: 'Total percent market share'
+                                    text: 'Number of Individuals Client Contacted'
                                 }
                             },
                             plotOptions: {
@@ -648,6 +652,117 @@
                                 }
                             }]
                         });
+                    }
+                });
+
+                
+                // Distinct PWID contacted NSEP - Speedometer
+                var dataSeriesSpousePrev =[];
+                var columnSpousePrev = {} 
+                $.ajax({
+                    url: "http://localhost/NZMIS/api/individualServiceContact",
+                    type: 'GET',
+                    success: function(res) {
+                        
+                        nonreactiveClients = parseInt(res.HTCClients);
+                        reactiveClients = parseInt(res.HTCClietsPositive);
+
+                        nonreactiveSpouse = parseInt(res.HTCSpouse);
+                        reactiveSpouse = parseInt(res.HTCSpousePositive);
+                        
+                        Highcharts.chart('containerPWIDNsepContacted', {
+
+                            chart: {
+                                type: 'gauge',
+                                plotBackgroundColor: null,
+                                plotBackgroundImage: null,
+                                plotBorderWidth: 0,
+                                plotShadow: false
+                            },
+
+                            title: {
+                                text: 'Number of distinct PWID contacted NSEP <br> (P3: Jan-June 2020)'
+                            },
+
+                            pane: {
+                                startAngle: -150,
+                                endAngle: 150,
+                                background: [{
+                                    backgroundColor: {
+                                        linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                                        stops: [
+                                            [0, '#FFF'],
+                                            [1, '#333']
+                                        ]
+                                    },
+                                    borderWidth: 0,
+                                    outerRadius: '109%'
+                                }, {
+                                    backgroundColor: {
+                                        linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                                        stops: [
+                                            [0, '#333'],
+                                            [1, '#FFF']
+                                        ]
+                                    },
+                                    borderWidth: 1,
+                                    outerRadius: '107%'
+                                }, {
+                                    // default background
+                                }, {
+                                    backgroundColor: '#DDD',
+                                    borderWidth: 0,
+                                    outerRadius: '105%',
+                                    innerRadius: '103%'
+                                }]
+                            },
+
+                            // the value axis
+                            yAxis: {
+                                min: 0,
+                                max: 26000,
+
+                            /*  minorTickInterval: 'auto',
+                                minorTickWidth: 1,
+                                minorTickLength: 40,
+                                minorTickPosition: 'inside',
+                                minorTickColor: '#666', */
+
+                                tickPixelInterval: 30,
+                                tickWidth: 2,
+                                tickPosition: 'inside',
+                                tickLength: 10,
+                                tickColor: '#666',
+                                labels: {
+                                    step: 2,
+                                    rotation: 'auto'
+                                },
+                                title: {
+                                    text: 'km/h'
+                                },
+                                plotBands: [{
+                                    from: 0,
+                                    to: 7000,
+                                    color: '#DF5353' // green
+                                }, {
+                                    from: 7001,
+                                    to: 17000,
+                                    color: '#DDDF0D' // yellow
+                                }, {
+                                    from: 17001,
+                                    to: 26000,
+                                    color: '#55BF3B' // red
+                                }]
+                            },
+
+                            series: [{
+                                name: 'Speed',
+                                data: [8000],
+                                tooltip: {
+                                    valueSuffix: ' km/h'
+                                }
+                            }]
+                        })
                     }
                 });
 

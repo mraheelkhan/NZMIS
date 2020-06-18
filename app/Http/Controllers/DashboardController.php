@@ -98,4 +98,11 @@ class DashboardController extends Controller
         // $result = DB::select($query);
         return $sp;
     }
+
+    public function targetNSEPQuarterP3_2020(){
+        
+        $sp = DB::select('select * from TargetNSEPQuaterP3_2020');
+        // $result = DB::select($query);
+        return response()->json($sp[0]);
+    }
 }

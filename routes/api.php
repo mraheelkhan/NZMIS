@@ -32,3 +32,4 @@ Route::get('annualClients', 'DashboardController@annualClients');
 Route::get('annualSpouse', 'DashboardController@annualSpouse');
 Route::get('htcClientSpouseAllCities', 'DashboardController@HtcClientSpousePrevalence');
 Route::get('individualServiceContact', 'DashboardController@IndividualServiceContact');
+Route::get('targetNSEPQuarterP3', 'DashboardController@targetNSEPQuarterP3_2020');
