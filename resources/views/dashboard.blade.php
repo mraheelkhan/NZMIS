@@ -657,18 +657,12 @@
 
                 
                 // Distinct PWID contacted NSEP - Speedometer
-                var dataSeriesSpousePrev =[];
-                var columnSpousePrev = {} 
                 $.ajax({
-                    url: "http://localhost/NZMIS/api/individualServiceContact",
+                    url: "http://localhost/NZMIS/api/targetNSEPQuarterP3",
                     type: 'GET',
                     success: function(res) {
                         
-                        nonreactiveClients = parseInt(res.HTCClients);
-                        reactiveClients = parseInt(res.HTCClietsPositive);
-
-                        nonreactiveSpouse = parseInt(res.HTCSpouse);
-                        reactiveSpouse = parseInt(res.HTCSpousePositive);
+                        valueAmount = res.DistinctContacts;
                         
                         Highcharts.chart('containerPWIDNsepContacted', {
 
@@ -756,10 +750,10 @@
                             },
 
                             series: [{
-                                name: 'Speed',
-                                data: [8000],
+                                name: 'PWID',
+                                data: [valueAmount],
                                 tooltip: {
-                                    valueSuffix: ' km/h'
+                                    valueSuffix: ' ....'
                                 }
                             }]
                         })
