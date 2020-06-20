@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Client;
 use App\VCCTsService;
 use App\VCCTsServiceDetails;
+use App\UserCity;
+use App\City;
+use App\UserProfile;
+use App\Organization;
 use DB;
 use Illuminate\Http\Request;
 
@@ -13,6 +17,9 @@ class DashboardController extends Controller
 
     public function index(){
         return view("dashboard");
+    }
+    public function copc(){
+        return view("dashboardCopc");
     }
     public function clientCount(){
 
@@ -96,7 +103,7 @@ class DashboardController extends Controller
         // $query = "";
         $sp = DB::select('SET NOCOUNT ON;EXEC [dbo].[RptDashboardServicesContacts]');
         // $result = DB::select($query);
-        return $sp;
+        return response()->json($sp[0]);
     }
 
     public function targetNSEPQuarterP3_2020(){
@@ -105,4 +112,71 @@ class DashboardController extends Controller
         // $result = DB::select($query);
         return response()->json($sp[0]);
     }
+    public function targetHTCQuarterP3_2020(){
+        
+        $sp = DB::select('select * from TargetHTCQuaterP3_2020');
+        // $result = DB::select($query);
+        return response()->json($sp[0]);
+    }
+    public function targetContactPerSyringesP3_2020(){
+        
+        $sp = DB::select('select * from TargetContactPerSyringesP3_2020');
+        // $result = DB::select($query);
+        return response()->json($sp[0]);
+    }
+
+
+
+
+    /*
+    ************************************
+    ******** COPC Site Queries *********
+    ************************************
+    */
+
+
+    public function RptDashboardCascadingPWIDCOPC($userid){
+        
+        $userCity = UserCity::where('UserID', $userid)->first();
+        $cityId = (int)$userCity->CityID;
+        $city = City::findOrFail($cityId);
+        $cityName = $city->CityName;
+
+        $userOrg = UserProfile::where("aspnet_User_UserId", $userid)->first();
+        $orgId = $userOrg->OrganizationID;
+        $organization = Organization::where("ID", $orgId)->first();
+        $orgName = $organization->Name;
+        $sp = DB::select('SET NOCOUNT ON; EXEC RptDashboardCascadingPWIDCOPC ?, ?, ?', array($orgName,$cityName, null));
+        return response()->json($sp[0]);
+    }
+
+    public function RptDashboardCascadingSpousesCOPC($userid){
+        
+        $userCity = UserCity::where('UserID', $userid)->first();
+        $cityId = (int)$userCity->CityID;
+        $city = City::findOrFail($cityId);
+        $cityName = $city->CityName;
+
+        $userOrg = UserProfile::where("aspnet_User_UserId", $userid)->first();
+        $orgId = $userOrg->OrganizationID;
+        $organization = Organization::where("ID", $orgId)->first();
+        $orgName = $organization->Name;
+        $sp = DB::select('SET NOCOUNT ON; EXEC RptDashboardCascadingSpousesCOPC ?, ?, ?', array($orgName,$cityName, null));
+        return response()->json($sp[0]);
+    }
+    public function RptDashboardHTCClientSpouseCity($userid){
+        
+        $userCity = UserCity::where('UserID', $userid)->first();
+        $cityId = (int)$userCity->CityID;
+        $city = City::findOrFail($cityId);
+        $cityName = $city->CityName;
+
+        $userOrg = UserProfile::where("aspnet_User_UserId", $userid)->first();
+        $orgId = $userOrg->OrganizationID;
+        $organization = Organization::where("ID", $orgId)->first();
+        $orgName = $organization->Name;
+        $sp = DB::select('SET NOCOUNT ON; EXEC RptDashboardHTCClientSpouseCity ?', array($cityName));
+        return response()->json($sp[0]);
+    }
+
 }

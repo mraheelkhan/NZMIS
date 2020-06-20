@@ -33,3 +33,9 @@ Route::get('annualSpouse', 'DashboardController@annualSpouse');
 Route::get('htcClientSpouseAllCities', 'DashboardController@HtcClientSpousePrevalence');
 Route::get('individualServiceContact', 'DashboardController@IndividualServiceContact');
 Route::get('targetNSEPQuarterP3', 'DashboardController@targetNSEPQuarterP3_2020');
+Route::get('targetHTCQuarterP3', 'DashboardController@targetHTCQuarterP3_2020');
+Route::get('targetContactPerSyringesP3', 'DashboardController@targetContactPerSyringesP3_2020');
+
+Route::get('byCopcPWID/{id}', 'DashboardController@RptDashboardCascadingPWIDCOPC');
+Route::get('byCopcSpouse/{id}', 'DashboardController@RptDashboardCascadingSpousesCOPC');
+Route::get('byCopcHtcClient/{id}', 'DashboardController@RptDashboardHTCClientSpouseCity');

@@ -108,6 +108,14 @@
                         <h2>Number of PWID Contacted NSEP</h2>
                         <div id="containerPWIDNsepContacted"></div>
                     </div>
+                    <div class="col-md-11">
+                        <h2>Number of PWID Contacted HTC</h2>
+                        <div id="containerPWIDHtcContacted"></div>
+                    </div>
+                    <div class="col-md-11">
+                        <h2>Number of PWID Contacted Per Syringe</h2>
+                        <div id="containerPWIDContactedPerSyringe"></div>
+                    </div>
                     <div class="col-md-6 col-sm-6 col-xs-6">
                         <div class="dashboard_graph">
                             <div class="row x_title">
@@ -389,7 +397,7 @@
                             },
 
                             title: {
-                                text: 'Highcharts Waterfall'
+                                text: 'PWID registered annually'
                             },
 
                             xAxis: {
@@ -452,7 +460,7 @@
                             },
 
                             title: {
-                                text: 'Highcharts Waterfall'
+                                text: 'Spouses of PWID registered annually'
                             },
 
                             xAxis: {
@@ -662,7 +670,7 @@
                     type: 'GET',
                     success: function(res) {
                         
-                        valueAmount = res.DistinctContacts;
+                        valueAmount = parseInt(res.DistinctContacts);
                         
                         Highcharts.chart('containerPWIDNsepContacted', {
 
@@ -715,13 +723,6 @@
                             yAxis: {
                                 min: 0,
                                 max: 26000,
-
-                            /*  minorTickInterval: 'auto',
-                                minorTickWidth: 1,
-                                minorTickLength: 40,
-                                minorTickPosition: 'inside',
-                                minorTickColor: '#666', */
-
                                 tickPixelInterval: 30,
                                 tickWidth: 2,
                                 tickPosition: 'inside',
@@ -732,7 +733,7 @@
                                     rotation: 'auto'
                                 },
                                 title: {
-                                    text: 'km/h'
+                                    text: 'PWID'
                                 },
                                 plotBands: [{
                                     from: 0,
@@ -750,10 +751,208 @@
                             },
 
                             series: [{
-                                name: 'PWID',
+                                name: 'Target',
                                 data: [valueAmount],
                                 tooltip: {
-                                    valueSuffix: ' ....'
+                                    valueSuffix: ' '
+                                }
+                            }]
+                        })
+                    }
+                });
+
+                
+                // Distinct PWID contacted HTC - Speedometer
+                $.ajax({
+                    url: "http://localhost/NZMIS/api/targetHTCQuarterP3",
+                    type: 'GET',
+                    success: function(res) {
+                        
+                        
+                        valueAmountHtc = parseInt(res.DistinctHTCContacts);
+                        
+                        Highcharts.chart('containerPWIDHtcContacted', {
+
+                            chart: {
+                                type: 'gauge',
+                                plotBackgroundColor: null,
+                                plotBackgroundImage: null,
+                                plotBorderWidth: 0,
+                                plotShadow: false
+                            },
+
+                            title: {
+                                text: 'Number of distinct PWID accessed HTC <br> (P3: Jan-June 2020)'
+                            },
+
+                            pane: {
+                                startAngle: -150,
+                                endAngle: 150,
+                                background: [{
+                                    backgroundColor: {
+                                        linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                                        stops: [
+                                            [0, '#FFF'],
+                                            [1, '#333']
+                                        ]
+                                    },
+                                    borderWidth: 0,
+                                    outerRadius: '109%'
+                                }, {
+                                    backgroundColor: {
+                                        linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                                        stops: [
+                                            [0, '#333'],
+                                            [1, '#FFF']
+                                        ]
+                                    },
+                                    borderWidth: 1,
+                                    outerRadius: '107%'
+                                }, {
+                                    // default background
+                                }, {
+                                    backgroundColor: '#DDD',
+                                    borderWidth: 0,
+                                    outerRadius: '105%',
+                                    innerRadius: '103%'
+                                }]
+                            },
+
+                            // the value axis
+                            yAxis: {
+                                min: 0,
+                                max: 14000,
+                                tickPixelInterval: 30,
+                                tickWidth: 2,
+                                tickPosition: 'inside',
+                                tickLength: 10,
+                                tickColor: '#666',
+                                labels: {
+                                    step: 2,
+                                    rotation: 'auto'
+                                },
+                                title: {
+                                    text: 'PWID'
+                                },
+                                plotBands: [{
+                                    from: 0,
+                                    to: 4000,
+                                    color: '#DF5353' // green
+                                }, {
+                                    from: 4001,
+                                    to: 9500,
+                                    color: '#DDDF0D' // yellow
+                                }, {
+                                    from: 9501,
+                                    to: 14000,
+                                    color: '#55BF3B' // red
+                                }]
+                            },
+
+                            series: [{
+                                name: 'Target',
+                                data: [valueAmountHtc],
+                                tooltip: {
+                                    valueSuffix: ' '
+                                }
+                            }]
+                        })
+                    }
+                });
+
+                
+                // Distinct PWID Contact Per Syringe - Speedometer
+                $.ajax({
+                    url: "http://localhost/NZMIS/api/targetContactPerSyringesP3",
+                    type: 'GET',
+                    success: function(res) {
+                        
+                        
+                        valueAmountPerSyringe = parseInt(res.ContactPerSyringes);
+                        
+                        Highcharts.chart('containerPWIDContactedPerSyringe', {
+
+                            chart: {
+                                type: 'gauge',
+                                plotBackgroundColor: null,
+                                plotBackgroundImage: null,
+                                plotBorderWidth: 0,
+                                plotShadow: false
+                            },
+
+                            title: {
+                                text: 'Number of distinct PWID accessed HTC <br> (P3: Jan-June 2020)'
+                            },
+
+                            pane: {
+                                startAngle: -150,
+                                endAngle: 150,
+                                background: [{
+                                    backgroundColor: {
+                                        linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                                        stops: [
+                                            [0, '#FFF'],
+                                            [1, '#333']
+                                        ]
+                                    },
+                                    borderWidth: 0,
+                                    outerRadius: '109%'
+                                }, {
+                                    backgroundColor: {
+                                        linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                                        stops: [
+                                            [0, '#333'],
+                                            [1, '#FFF']
+                                        ]
+                                    },
+                                    borderWidth: 1,
+                                    outerRadius: '107%'
+                                }, {
+                                    // default background
+                                }, {
+                                    backgroundColor: '#DDD',
+                                    borderWidth: 0,
+                                    outerRadius: '105%',
+                                    innerRadius: '103%'
+                                }]
+                            },
+
+                            // the value axis
+                            yAxis: {
+                                min: 0,
+                                max: 260,
+                                tickPixelInterval: 30,
+                                tickWidth: 2,
+                                tickPosition: 'inside',
+                                tickLength: 10,
+                                tickColor: '#666',
+                                labels: {
+                                    step: 2,
+                                    rotation: 'auto'
+                                },
+                                title: {
+                                    text: 'PWID'
+                                },
+                                plotBands: [{
+                                    from: 0,
+                                    to: 70,
+                                    color: '#DF5353' // green
+                                }, {
+                                    from: 71,
+                                    to: 170,
+                                    color: '#DDDF0D' // yellow
+                                }, {
+                                    from: 171,
+                                    to: 260,
+                                    color: '#55BF3B' // red
+                                }]
+                            },
+
+                            series: [{
+                                name: 'Target',
+                                data: [valueAmountPerSyringe],
+                                tooltip: {
+                                    valueSuffix: ' '
                                 }
                             }]
                         })

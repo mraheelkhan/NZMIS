@@ -38,3 +38,4 @@ Route::get('/test', function(){
 
 
 Route::get('dashboard', 'DashboardController@index');
+Route::get('dashboard/copc', 'DashboardController@copc');
