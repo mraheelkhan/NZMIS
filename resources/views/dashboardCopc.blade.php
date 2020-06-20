@@ -146,6 +146,9 @@
             window.onload = function(e){ 
 
                 const user_id = "13F14598-8FC1-421A-84C6-FF10A444E2A0";
+                // const BASEURL = "http://localhost/NZMIS/api/";
+                const BASEURL = "http://mail.nzmis.com/api/";
+                
                 Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function (color) {
                     return {
                         radialGradient: {
@@ -161,7 +164,7 @@
                 });
 
                 $.ajax({
-                    url: "http://localhost/NZMIS/api/clientCount",
+                    url: BASEURL + "clientCount",
                     type: 'GET',
                     success: function(res) {
                         $('#ctl00_cphRightContent_lblClients').html(res.TotalClients)
@@ -169,7 +172,7 @@
                 });
 
                 $.ajax({
-                    url: "http://localhost/NZMIS/api/clientTested",
+                    url: BASEURL + "clientTested",
                     type: 'GET',
                     success: function(res) {
                         $('#ctl00_cphRightContent_lblTestingClients ').html(res.TotalTestingClients)
@@ -181,7 +184,7 @@
                     data:[]
                 } 
                 $.ajax({
-                    url: "http://localhost/NZMIS/api/byCopcPWID/"+user_id,
+                    url: BASEURL + "byCopcPWID/"+user_id,
                     type: 'GET',
                     success: function(res) {
                         data = res;
@@ -264,7 +267,7 @@
                     data:[]
                 } 
                 $.ajax({
-                    url: "http://localhost/NZMIS/api/byCopcSpouse/"+user_id,
+                    url: BASEURL + "byCopcSpouse/"+user_id,
                     type: 'GET',
                     success: function(res) {
                         data = res;
@@ -341,7 +344,7 @@
                 var dataSeriesSpousePrev =[];
                 var columnSpousePrev = {} 
                 $.ajax({
-                    url: "http://localhost/NZMIS/api/byCopcHtcClient/" + user_id,
+                    url: BASEURL + "byCopcHtcClient/" + user_id,
                     type: 'GET',
                     success: function(res) {
                         
@@ -448,7 +451,7 @@
                 var dataSeriesSpousePrev =[];
                 var columnSpousePrev = {} 
                 $.ajax({
-                    url: "http://localhost/NZMIS/api/individualServiceContact",
+                    url: BASEURL + "individualServiceContact",
                     type: 'GET',
                     success: function(res) {
                         

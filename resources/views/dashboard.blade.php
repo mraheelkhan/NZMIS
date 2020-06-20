@@ -164,6 +164,8 @@
         <script>
             window.onload = function(e){ 
 
+                // const BASEURL = "http://localhost/NZMIS/api/";
+                const BASEURL = "http://mail.nzmis.com/api/";
                 Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function (color) {
                     return {
                         radialGradient: {
@@ -179,7 +181,7 @@
                 });
 
                 $.ajax({
-                    url: "http://localhost/NZMIS/api/clientCount",
+                    url: BASEURL + "clientCount",
                     type: 'GET',
                     success: function(res) {
                         $('#ctl00_cphRightContent_lblClients').html(res.TotalClients)
@@ -187,7 +189,7 @@
                 });
 
                 $.ajax({
-                    url: "http://localhost/NZMIS/api/clientTested",
+                    url: BASEURL + "clientTested",
                     type: 'GET',
                     success: function(res) {
                         $('#ctl00_cphRightContent_lblTestingClients ').html(res.TotalTestingClients)
@@ -199,7 +201,7 @@
                     data:[]
                 } 
                 $.ajax({
-                    url: "http://mail.nzmis.com/api/byCitiesPWID",
+                    url: BASEURL + "byCitiesPWID",
                     type: 'GET',
                     success: function(res) {
                         
@@ -292,7 +294,7 @@
                     data:[]
                 } 
                 $.ajax({
-                    url: "http://localhost/NZMIS/api/byCitiesSpouse",
+                    url: BASEURL + "byCitiesSpouse",
                     type: 'GET',
                     success: function(res) {
                         
@@ -378,7 +380,7 @@
                 var dataSeriesAnnualClient =[];
                 var columnAnnualClient = {} 
                 $.ajax({
-                    url: "http://localhost/NZMIS/api/annualClients",
+                    url: BASEURL + "annualClients",
                     type: 'GET',
                     success: function(res) {
                         
@@ -441,7 +443,7 @@
                 var dataSeriesAnnualSpouse =[];
                 var columnAnnualSpouse = {} 
                 $.ajax({
-                    url: "http://localhost/NZMIS/api/annualSpouse",
+                    url: BASEURL + "annualSpouse",
                     type: 'GET',
                     success: function(res) {
                         
@@ -504,7 +506,7 @@
                 var dataSeriesSpousePrev =[];
                 var columnSpousePrev = {} 
                 $.ajax({
-                    url: "http://localhost/NZMIS/api/htcClientSpouseAllCities",
+                    url: BASEURL + "htcClientSpouseAllCities",
                     type: 'GET',
                     success: function(res) {
                         
@@ -611,7 +613,7 @@
                 var dataSeriesSpousePrev =[];
                 var columnSpousePrev = {} 
                 $.ajax({
-                    url: "http://localhost/NZMIS/api/individualServiceContact",
+                    url: BASEURL + "individualServiceContact",
                     type: 'GET',
                     success: function(res) {
                         
@@ -666,7 +668,7 @@
                 
                 // Distinct PWID contacted NSEP - Speedometer
                 $.ajax({
-                    url: "http://localhost/NZMIS/api/targetNSEPQuarterP3",
+                    url: BASEURL + "targetNSEPQuarterP3",
                     type: 'GET',
                     success: function(res) {
                         
@@ -764,7 +766,7 @@
                 
                 // Distinct PWID contacted HTC - Speedometer
                 $.ajax({
-                    url: "http://localhost/NZMIS/api/targetHTCQuarterP3",
+                    url: BASEURL + "targetHTCQuarterP3",
                     type: 'GET',
                     success: function(res) {
                         
@@ -863,7 +865,7 @@
                 
                 // Distinct PWID Contact Per Syringe - Speedometer
                 $.ajax({
-                    url: "http://localhost/NZMIS/api/targetContactPerSyringesP3",
+                    url: BASEURL + "targetContactPerSyringesP3",
                     type: 'GET',
                     success: function(res) {
                         
